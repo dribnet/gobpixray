@@ -1,0 +1,155 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="pixray mint tez"
+    content="Neural net images, easy-as."
+  />
+  <meta name="description" content="Neural net images, easy-as" />
+  <meta property="og:title" content="pixray mint tez" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pixray.gob.io/" />
+  <meta property="og:image" content="https://pixray.gob.io/preview-image.png" />
+  <meta property="og:image:width" content="480" />
+  <meta property="og:image:height" content="270" />
+  <meta property="og:description" content="Neural net images, easy-as" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="pixray mint tez" />
+  <meta name="twitter:title" content="pixray mint tez" />
+  <meta name="twitter:description" content="Neural net images, easy-as" />
+  <meta name="twitter:image" content="https://pixray.gob.io/preview-image.png" />
+
+<!--    <script
+    type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+  ></script>
+
+ -->
+   <script language="javascript" type="text/javascript" src="/lib/model-viewer.min.js"></script>
+  <script language="javascript" type="text/javascript" src="/lib/p5_1.3.1.js"></script>
+  <script language="javascript" type="text/javascript" src="mint.js"></script>
+
+  <title>pixray mint tez</title>
+
+    <style>
+        button {
+            border: none;
+            color: black;
+            padding: 8px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            background-color: #ccc;
+        }
+        h3 { text-align:center; }
+        h4 {
+          font-family:  basier_square, Helvetica, sans-serif;
+          font-size: 24px !important;
+          line-height: 35px !important;
+          text-align:center;
+          margin: 50 !important;
+        }
+        #root,#help {
+            font: 300 18px "Helvetica Neue";
+            padding: 50; margin: 50; 
+            background: #f0f0f0;
+            opacity: 0.0;
+            display: none;
+            text-align:left;
+            -webkit-transition: opacity 0.2s ease;
+            -moz-transition: opacity 0.2s ease;
+            -o-transition: opacity 0.2s ease;
+            -ms-transition: opacity 0.2s ease;
+        }
+        #market {
+            opacity: 0.0;
+            -webkit-transition: opacity 0.2s ease;
+            -moz-transition: opacity 0.2s ease;
+            -o-transition: opacity 0.2s ease;
+            -ms-transition: opacity 0.2s ease;
+        }
+        .inner { 
+            position: absolute; 
+        }
+        .centerInner {
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+<body style="background-color:white">
+
+    <h4>pixray mint tez</h4>
+
+        <div class="inner centerInner" id="help" width="1024px" height="576px">
+            <H3>pixray mint demo</H3>
+            <pre>
+
+This pixray demo allow direct hic et nunc minting.
+Made something you like? Generate and mint it to claim it as yours.
+Mint once or multiple times with any tezos connected wallet.
+The piece you mint is yours to keep or swap.
+There is currently a mint charge of 1 ꜩ to support this online platform.
+I collect no royalaties. However you as creator get 10% on resales.
+Have fun and good luck. 🤗
+            </pre>
+            <center>
+            <button onclick="toggleHelp();">Got it!</button>
+            </center>
+        </div>
+
+            <div id="root" style="display: none;">
+              <H3>MINT SCREEN HERE</H3>
+            <pre>
+Mint is disabled, sorry.
+            </pre>
+            <center>
+            <button onclick="hideMint();">bummer</button>
+            </center>
+            </div>
+
+    <iframe src="https://replicate.ai/dribnet/pixray/embed" frameborder="0" scrolling="no" height="600" width="100%"></iframe>
+
+    <div id="static_controls" style="text-align:center;">
+        <center>
+        <table>
+                <tr >
+                    <td id="ui_help">
+                      <button onclick="toggleHelp();">help</button>
+                    </td>
+                    <td id="ui_market">
+                      <button onclick="toggleMarket();">market</button>
+                    </td>
+                    <td id="ui_generate">
+                      <button onclick="mintPressed();">mint</button> 
+                    </td>
+                    <td id="ui_sync">
+                    </td>
+                </tr>
+
+                </tr>
+        </table>    
+        </center>
+    </div>
+
+<p>
+
+    <iframe id="market" src="https://objkt.com/search?fa2=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&search=Metropolis&embedder=true&sortBy=listDesc" frameborder="0" scrolling="no" height="1600" width="100%"></iframe>
+
+
+
+  <script src="/static/js/bundle.js"></script>
+  <script src="/static/js/vendors~main.chunk.js"></script>
+  <script src="/static/js/main.chunk.js"></script>
+
+
+</body>
