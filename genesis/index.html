@@ -45,6 +45,11 @@
             cursor: pointer;
             background-color: #ccc;
         }
+        button:disabled,
+        button[disabled]{
+          background-color: #e8e8e8;
+          color: #888888;
+        }        
         h3 { text-align:center; }
         h4 {
           font-family:  basier_square, Helvetica, sans-serif;
@@ -88,13 +93,14 @@
 </head>
 <body style="background-color:white">
 
-    <h4>pixray mint tez</h4>
+    <h4>pixray genesis minting</h4>
 
         <div class="inner centerInner" id="help" width="1024px" height="576px">
-            <H3>pixray mint demo</H3>
+            <H3>pixray genesis</H3>
             <pre>
 
-This pixray demo allow direct hic et nunc minting.
+An experimental first iteration of pixray minting.
+It can be used with tezos currency and hic et nunc.
 Made something you like? Generate and mint it to claim it as yours.
 Mint once or multiple times with any tezos connected wallet.
 The piece you mint is yours to keep or swap.
@@ -117,25 +123,25 @@ Mint is disabled, sorry.
             </center>
             </div>
 
-    <iframe src="https://replicate.ai/dribnet/pixray/embed" frameborder="0" scrolling="no" height="600" width="100%"></iframe>
+    <iframe src="https://replicate.ai/dribnet/pixray/embed" frameborder="0" scrolling="no" height="540" width="100%"></iframe>
+
+    <h4>result</h4>
 
     <div id="static_controls" style="text-align:center;">
         <center>
+        <img id="result_img" src="placeholder.png" height="320px">
         <table>
-                <tr >
+                <tr>
                     <td id="ui_help">
                       <button onclick="toggleHelp();">help</button>
                     </td>
                     <td id="ui_market">
                       <button onclick="toggleMarket();">market</button>
                     </td>
-                    <td id="ui_generate">
-                      <button onclick="mintPressed();">mint</button> 
+                    <td id="ui_mint">
                     </td>
                     <td id="ui_sync">
                     </td>
-                </tr>
-
                 </tr>
         </table>    
         </center>
@@ -143,7 +149,7 @@ Mint is disabled, sorry.
 
 <p>
 
-    <iframe id="market" src="https://objkt.com/search?fa2=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&search=Metropolis&embedder=true&sortBy=listDesc" frameborder="0" scrolling="no" height="1600" width="100%"></iframe>
+    <iframe id="market" src="https://objkt.com/search?fa2=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&search=pixray_genesis&sortBy=listDesc" frameborder="0" scrolling="no" height="1600" width="100%"></iframe>
 
 
 
