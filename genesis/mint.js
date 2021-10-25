@@ -143,43 +143,6 @@ function getCurrentTzAddress() {
   }
 }
 
-function setupMintData(resultObj) {
-  let objkt_file = {
-    "title": "Upload OBJKT",
-    "mimeType": "image/png",
-  };
-  objkt_file.reader = resultObj.dataUrl;
-  objkt_file.buffer = resultObj.buffer;
-  objkt_file.file = resultObj.blob;
-  // objkt_file.reader = null;
-  // objkt_file.buffer = null;
-  // objkt_file.file = null;
-
-  let infoData = "https://pixray.gob.io/genesis/";
-
-  let dateStr = new Date().toDateString();
-  let walletStr = getCurrentTzAddress();
-  let showName = walletStr;
-  window.tz = window.tz || {};
-  let tags = "pixray_genesis,generative,pixray,p5,generativeart,png"
-  window.tz.minting_location = "none";
-  window.tz.minting_wallet = walletStr;
-  window.tz.mintData = {
-    "title": "Title Pending (pixray_genesis)",
-    "description": "Description here.\n" + 
-      "Settings here.\n" +
-      "This location discovered and minted by " + showName + " " + dateStr + ".\n" +
-      infoData.Url,
-    "tags": tags,
-    "royalties": 10,
-    "file": objkt_file,
-    "mint_fee": 1
-  }  
-
-  result_is_ready = true;
-  updateMintButton();
-}
-
 let market_is_shown = false;
 function toggleMarket() {
   let target = document.getElementById("market");
@@ -208,7 +171,59 @@ function toggleHelp() {
   }
 }
 
-//**blob to dataURL**
+// https://gist.github.com/sebleier/554280
+const stopWords = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
+
+function setupMintData(resultObj) {
+  let objkt_file = {
+    "title": "Upload OBJKT",
+    "mimeType": "image/png",
+  };
+  objkt_file.reader = resultObj.dataUrl;
+  objkt_file.buffer = resultObj.buffer;
+  objkt_file.file = resultObj.blob;
+  let md = resultObj.meta;
+  print(resultObj);
+
+  // poor man's sanitation https://stackoverflow.com/a/23453651/1010653
+  let tagstr = md["Prompt"].toLowerCase().replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+  let wordSplits = tagstr.split(/\s+/);
+  // print("wordSplits");
+  // console.log(wordSplits);
+  let wordSet = new Set(wordSplits);
+  // remove stopwords, etc
+  stopWords.forEach(Set.prototype.delete, wordSet);
+  // print("Wordset");
+  // console.log(wordSet);
+  let wordArray = Array.from(wordSet);
+  // print("wordArray");
+  // console.log(wordArray);
+  let tags = wordArray.join(",") + ",pixray_genesis"
+  // print("tags are " + tags);
+
+  let desc = "Neural network imagery guided by the phrase '" + md["Prompt"] + "' " +
+      "created by " + md["Creator"] + " on " + md["Created"] + 
+      " using the pixray genesis tool at " + md["Source"];
+
+  let walletStr = getCurrentTzAddress();
+
+  window.tz = window.tz || {};
+  window.tz.minting_location = "none";
+  window.tz.minting_wallet = walletStr;
+  window.tz.mintData = {
+    "title": md["Title"],
+    "description": desc,
+    "tags": tags,
+    "royalties": 10,
+    "file": objkt_file,
+    "mint_fee": 1
+  }  
+
+  result_is_ready = true;
+  updateMintButton();
+}
+
+// helper function: blob to dataURL
 // https://stackoverflow.com/a/30407959/1010653
 function blobToDataURL(blob, callback) {
     var a = new FileReader();
@@ -216,35 +231,36 @@ function blobToDataURL(blob, callback) {
     a.readAsDataURL(blob);
 }
 
+// take the image now on a canvas, add metadata, convert to blob, etc
 function prepareImage(p5cb) {
   let img_w = p5cb.img.width;
   let img_h = p5cb.img.height;
-  print("IMG COMPLETE: " + img_w +","+ img_h)
-
+  let mint_info = p5cb.mint_info;
 
   let walletStr = getCurrentTzAddress();
   let showName = walletStr;
   window.tz = window.tz || {};
   if (window.tz.handle != null) {
-    showName = window.tz.handle + " / " + walletStr;
+    showName = window.tz.handle + " (" + walletStr + ")";
   }
   infoUrl = "https://pixray.gob.io/genesis/"
-  let description = "Created by " + showName + ".\n" + infoUrl;
   let dateStr = new Date().toDateString();
 
-  // TODO: fix metadata
-  let metadata = {
-    "tEXt": {
-      "Title":            "pixray",
-      "Author":           "dribnet",
-      "Description":      description,
+  let meta_map = {
+      "Title":            mint_info["prompts"] + " (pixray_genesis)",
+      "Prompt":           mint_info["prompts"],
+      "Settings":         mint_info["settings"],
+      "Seed":             mint_info["seed"],
+      "Software":         "pixray" + " (" + mint_info["build"] + ")",
+      "Creator":          showName,
+      "Author":           "dribnet and " + showName,
       "Copyright":        "(c) 2021 Tom White (dribnet)",
-      "Software":         "pixray",
-      // "Disclaimer":       "",
-      // "Warning":          "",
       "Source":           infoUrl,
-      "Comment":          dateStr
-    }
+      "Created":          dateStr
+    };
+
+  let metadata = {
+    "tEXt": meta_map
   }
 
   var offscreenCanvas = document.createElement('canvas');
@@ -286,25 +302,27 @@ function prepareImage(p5cb) {
 
         // offscreenCanvas.remove();
         // offscreenCanvas.parentNode.removeChild(offscreenCanvas);
-        setupMintData({"dataUrl":dataurl, "blob": newBlob, "buffer": freshUint8View});
+        setupMintData({"dataUrl":dataurl, "blob": newBlob,
+                       "buffer": freshUint8View, "meta" : meta_map});
       });
     });
     reader.readAsArrayBuffer(blob);
   }, mimeType);
 }
 
-function beginFetchImage(img_src) {
+// this method async runs a baby p5.js program to get the image on a canvas
+function beginFetchImage(img_src, mint_info) {
   var s = function( p ) {
     p.img = null;
 
     p.preload = function() {
-      console.log("P PRELOAD START")
+      // console.log("P PRELOAD START")
       p.img = p.loadImage(img_src);
-      console.log("P PRELOAD END")
+      // console.log("P PRELOAD END")
     }
 
     p.setup = function() {
-      console.log("P SETUP " +  p.img.width +","+ p.img.height)
+      // console.log("P SETUP " +  p.img.width +","+ p.img.height)
       p.createCanvas(p.img.width, p.img.height);
       p.noLoop();
     };
@@ -312,18 +330,21 @@ function beginFetchImage(img_src) {
     p.draw = function() {
       p.background(0);
       p.image(p.img, 0, 0);
-      console.log("P DRAW DONE " +  p.img.width +","+ p.img.height);
+      // console.log("P DRAW DONE " +  p.img.width +","+ p.img.height);
+      // this is the callback to use the image for minting, etc.
       prepareImage(this);
     }
   }
 
   let p5cb = new p5(s);
+  p5cb.mint_info = mint_info;
   p5cb.redraw();  
 }
 
 let result_is_ready = false;
 let standby_image = "placeholder.png";
-function refreshResult(new_image) {
+// update UI with either null (if processing) or a URL to a completed image
+function refreshResult(new_image, mint_info=null) {
   // let target = document.getElementById("result_img");
   if (new_image == null) {
     result_is_ready = false;
@@ -332,11 +353,13 @@ function refreshResult(new_image) {
   }
   else {
     // target["src"] = new_image;
-    beginFetchImage(standby_image);
+    // beginFetchImage(standby_image); // <- use this when CORS debugging
+    beginFetchImage(new_image, mint_info);
   }
   // console.log("UPDATED TO " + new_image);
 }
 
+// update UI when processing starts or stops
 function respondToMessage(d) {
   // console.log(d);
   if (!d.hasOwnProperty('name') || (d["name"] != "prediction")) {
@@ -344,14 +367,21 @@ function respondToMessage(d) {
     return;
   }
   if (d["data"]["status"] == "success") {
-    print(d);
-    refreshResult("https://replicate.ai" + d["data"]["output_file"]);
+    // print(d);
+    let mint_info = {
+      "prompts": "Prompts pending",
+      "settings": "Settings pending",
+      "seed": "seed pending",
+      "build": "build pending"
+    }
+    refreshResult("https://replicate.ai" + d["data"]["output_file"], mint_info);
   }
   else if (result_is_ready) {
     refreshResult(null);
   }
 }
 
+// listen for messages coming from replicate.ai embed
 window.addEventListener("message", (event) => {
   respondToMessage(event.data);
 })
