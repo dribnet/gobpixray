@@ -32,9 +32,21 @@
   <script language="javascript" type="text/javascript" src="/lib/png_metadata.js"></script>
   <script language="javascript" type="text/javascript" src="mint.js"></script>
 
-  <title>pixray mint tez</title>
+  <title>pixray genesis</title>
 
     <style>
+        .styles_container__1q-zX,.styles_content__3YwU- {
+            opacity: 0.0 !important;
+            pointer-events: all;
+        }
+        .styles_container__3A2-N {
+            padding: 8px 20px !important;
+            pointer-events: all;
+        }
+        .styles_container__1Yt5m {
+            width: 95% !important;
+            pointer-events: all;
+        }
         button {
             border: none;
             color: black;
@@ -62,7 +74,7 @@
         }
         #root,#help {
             font: 300 18px "Helvetica Neue";
-            padding: 50; margin: 50; 
+            padding: 10; margin: 10; 
             background: #f0f0f0;
             opacity: 0.0;
             display: none;
@@ -74,6 +86,7 @@
         }
         #market {
             opacity: 0.0;
+            z-index: 500;
             -webkit-transition: opacity 0.2s ease;
             -moz-transition: opacity 0.2s ease;
             -o-transition: opacity 0.2s ease;
@@ -95,7 +108,20 @@
 </head>
 <body style="background-color:white">
 
-    <h4>pixray genesis minting</h4>
+    <div class="outer">
+        <h4>pixray genesis minting</h4>
+
+        <div class="inner">
+            <div id="root" style="display: none;">
+                  <H3>MINT SCREEN HERE</H3>
+                <pre>
+    Mint is disabled, sorry.
+                </pre>
+                <center>
+                <button onclick="hideMint();">bummer</button>
+                </center>
+            </div>
+        </div>
 
         <div class="inner centerInner" id="help" width="1024px" height="576px">
             <H3>pixray genesis</H3>
@@ -114,16 +140,7 @@ Have fun and good luck. 🤗
             <button onclick="toggleHelp();">Got it!</button>
             </center>
         </div>
-
-            <div id="root" style="display: none;">
-              <H3>MINT SCREEN HERE</H3>
-            <pre>
-Mint is disabled, sorry.
-            </pre>
-            <center>
-            <button onclick="hideMint();">bummer</button>
-            </center>
-            </div>
+    </div>
 
     <iframe src="https://replicate.ai/dribnet/pixray/embed" frameborder="0" scrolling="no" height="540" width="100%"></iframe>
 
@@ -131,27 +148,26 @@ Mint is disabled, sorry.
 
     <div id="static_controls" style="text-align:center;">
         <center>
-<!--         <img id="result_img" src="placeholder.png" height="320px">
- -->        <table>
+            <table>
                 <tr>
                     <td id="ui_help">
                       <button onclick="toggleHelp();">help</button>
-                    </td>
-                    <td id="ui_market">
-                      <button onclick="toggleMarket();">market</button>
                     </td>
                     <td id="ui_mint">
                     </td>
                     <td id="ui_sync">
                     </td>
+                    <td id="ui_market">
+                      <button onclick="toggleMarket();">market</button>
+                    </td>
                 </tr>
-        </table>    
+           </table>    
         </center>
     </div>
 
 <p>
 
-    <iframe id="market" src="https://objkt.com/search?fa2=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&search=pixray_genesis&sortBy=listDesc" frameborder="0" scrolling="no" height="1600" width="100%"></iframe>
+    <iframe display="none" id="market" src="https://objkt.com/search?fa2=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&search=pixray_genesis&sortBy=listDesc" frameborder="0" scrolling="no" height="1600" width="100%"></iframe>
 
 
 

@@ -6274,13 +6274,13 @@ const Page = ({
     className: classes,
     children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_5__["jsxDEV"])(react_helmet__WEBPACK_IMPORTED_MODULE_1__["Helmet"], {
       children: title !== '' ? /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_5__["jsxDEV"])("title", {
-        children: [title, " - hic et nunc"]
-      }, void 0, true, {
+        children: "pixray genesis"
+      }, void 0, false, {
         fileName: _jsxFileName,
         lineNumber: 16,
         columnNumber: 11
       }, undefined) : /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_5__["jsxDEV"])("title", {
-        children: "hic et nunc"
+        children: "pixray genesis"
       }, void 0, false, {
         fileName: _jsxFileName,
         lineNumber: 18,
@@ -12668,12 +12668,13 @@ class HicetnuncContextProviderClass extends react__WEBPACK_IMPORTED_MODULE_0__["
           confirm: false
         });
         const c = await Tezos.wallet.at(this.state.objkt);
-        await Tezos.wallet.batch().withContractCall(c.methods.mint_OBJKT(tz, parseFloat(amount), ('ipfs://' + cid).split('').reduce((hex, c) => hex += c.charCodeAt(0).toString(16).padStart(2, '0'), ''), parseFloat(royalties) * 10)).withTransfer({
-          to: 'tz1dWALGCrUQSWi8QLxTjfUQUkmBtj53YpRm',
+        await Tezos.wallet.batch().withContractCall(c.methods.mint_OBJKT(tz, parseFloat(amount), ('ipfs://' + cid).split('').reduce((hex, c) => hex += c.charCodeAt(0).toString(16).padStart(2, '0'), ''), parseFloat(royalties) * 10)) // .withTransfer({ to: 'tz2XLyo68rXjNWKKiNdVJQahmYMrBAjffgob', amount: parseFloat(xtz_fee) })
+        .withTransfer({
+          to: 'tz2AMicvMebtXES1HVwdiYu1mco71996opix',
           amount: parseFloat(xtz_fee)
         }).send({
           amount: 0,
-          storageLimit: 720
+          storageLimit: 1000
         }).then(op => op.confirmation(1).then(() => {
           console.log("MINT"); // console.log(op)
           // console.log(this.state.objkt)
@@ -12697,11 +12698,12 @@ class HicetnuncContextProviderClass extends react__WEBPACK_IMPORTED_MODULE_0__["
               visible: false
             }); // this hack gets off the mint page
 
-            console.log("Successful metropolis mint, returning home");
+            console.log("Successful pixray mint, returning home");
             document.getElementById("tzHomeButton").firstElementChild.click();
           }, 1000);
         })).catch(err => {
-          // if any error happens
+          console.log(err); // if any error happens
+
           this.state.setFeedback({
             message: 'an error occurred ❌',
             progress: true,
@@ -12713,10 +12715,10 @@ class HicetnuncContextProviderClass extends react__WEBPACK_IMPORTED_MODULE_0__["
               visible: false
             }); // this hack gets off the mint page
 
-            console.log("Metropolis mint error, returning home");
+            console.log("Pixray mint error, returning home");
             console.log(err);
             document.getElementById("tzHomeButton").firstElementChild.click();
-          }, 1000);
+          }, 10000);
         });
       },
       mint: async (tz, amount, cid, royalties) => {
@@ -12985,7 +12987,7 @@ class HicetnuncContextProviderClass extends react__WEBPACK_IMPORTED_MODULE_0__["
       children: this.props.children
     }, void 0, false, {
       fileName: _jsxFileName,
-      lineNumber: 646,
+      lineNumber: 649,
       columnNumber: 7
     }, this);
   }

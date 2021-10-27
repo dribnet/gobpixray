@@ -25,6 +25,9 @@ function setup() {
 
 let suspendInput = false;
 function mintPressed() {
+  if (market_is_shown) {
+    toggleMarket();
+  }
   suspendInput = true;
   let rootDiv = document.getElementById("root");
   rootDiv.style.opacity = "0.95";  
@@ -148,10 +151,12 @@ function toggleMarket() {
   let target = document.getElementById("market");
   if (market_is_shown) {
     target.style.opacity = "0.0";
+    target.style.display = "none";
     market_is_shown = false;
   }
   else {
     target.style.opacity = "1.0";  
+    target.style.display = "block";
     market_is_shown = true;
   }
 }
@@ -216,7 +221,7 @@ function setupMintData(resultObj) {
     "tags": tags,
     "royalties": 10,
     "file": objkt_file,
-    "mint_fee": 1
+    "mint_fee": 0.01
   }  
 
   result_is_ready = true;
