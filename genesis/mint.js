@@ -191,7 +191,7 @@ function setupMintData(resultObj) {
   print(resultObj);
 
   // poor man's sanitation https://stackoverflow.com/a/23453651/1010653
-  let tagstr = md["Prompt"].toLowerCase().replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+  let tagstr = md["Title"].toLowerCase().replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
   let wordSplits = tagstr.split(/\s+/);
   // print("wordSplits");
   // console.log(wordSplits);
@@ -203,12 +203,21 @@ function setupMintData(resultObj) {
   let wordArray = Array.from(wordSet);
   // print("wordArray");
   // console.log(wordArray);
-  let tags = wordArray.join(",") + ",pixray_genesis"
+  let tags = wordArray.join(",") + ",pixray_beta_genesis"
   // print("tags are " + tags);
 
-  let desc = "Neural network imagery guided by the phrase '" + md["Prompt"] + "' " +
-      "created by " + md["Creator"] + " on " + md["Created"] + 
-      " using the pixray genesis tool at " + md["Source"];
+  let desc = "Neural network image created by " + md["Creator"]
+  if (md["Title"] == "(untitled)") {
+    desc = desc + " with no title provided";
+  }
+  else {
+    desc = desc + " from the given title '" + md["Title"] + "' ";
+  }
+  desc = desc + " on the pixray genesis tool at " + md["Source"] + 
+      " with a style of " + md["Drawing Style"];
+  if (md["Advanced Settings"] != "") {
+    desc = desc + " and advanced settings\n{ " + md["Advanced Settings"] + "\n }";
+  }
 
   let walletStr = getCurrentTzAddress();
 
@@ -216,7 +225,7 @@ function setupMintData(resultObj) {
   window.tz.minting_location = "none";
   window.tz.minting_wallet = walletStr;
   window.tz.mintData = {
-    "title": md["Title"],
+    "title": md["Title"] + " (pixray_beta_genesis)",
     "description": desc,
     "tags": tags,
     "royalties": 10,
@@ -252,16 +261,16 @@ function prepareImage(p5cb) {
   let dateStr = new Date().toDateString();
 
   let meta_map = {
-      "Title":            mint_info["prompts"] + " (pixray_genesis)",
-      "Prompt":           mint_info["prompts"],
-      "Settings":         mint_info["settings"],
-      "Seed":             mint_info["seed"],
-      "Software":         "pixray" + " (" + mint_info["build"] + ")",
-      "Creator":          showName,
-      "Author":           "dribnet and " + showName,
-      "Copyright":        "(c) 2021 Tom White (dribnet)",
-      "Source":           infoUrl,
-      "Created":          dateStr
+      "Title":             mint_info["title"],
+      "Advanced Settings": mint_info["advanced_settings"],
+      "Drawing Style":     mint_info["drawing_style"],
+      "Seed":              mint_info["seed"],
+      "Software":          "pixray" + " (" + mint_info["build"] + ")",
+      "Creator":           showName,
+      "Author":            "dribnet and " + showName,
+      "Copyright":         "(c) 2021 Tom White (dribnet)",
+      "Source":            infoUrl,
+      "Created":           dateStr
     };
 
   let metadata = {
@@ -367,15 +376,31 @@ function refreshResult(new_image, mint_info=null) {
 // update UI when processing starts or stops
 function respondToMessage(d) {
   // console.log(d);
-  if (!d.hasOwnProperty('name') || (d["name"] != "prediction")) {
+  if (!d.hasOwnProperty('name') || (d["name"] != "replicate.prediction")) {
     // console.log("NO PREDICTION")
     return;
   }
   if (d["data"]["status"] == "success") {
-    // print(d);
+    if(d["data"]["inputs"]["quality"].trim() == "draft") {
+      // console.log("DRAFT COMPLETE")
+      return;      
+    }
+    let title = "";
+    if (d["data"]["inputs"].hasOwnProperty('title')) {
+      title = d["data"]["inputs"]["title"].trim();
+    }
+    let advanced_settings = "";
+    if (d["data"]["inputs"].hasOwnProperty('advanced_settings')) {
+      advanced_settings = d["data"]["inputs"]["advanced_settings"].trim();
+    }
+    if (title == "") {
+      title = "(untitled)";
+    }
+    let drawing_style = d["data"]["inputs"]["drawing_style"].trim();
     let mint_info = {
-      "prompts": "Prompts pending",
-      "settings": "Settings pending",
+      "title": title,
+      "advanced_settings": advanced_settings,
+      "drawing_style": drawing_style,
       "seed": "seed pending",
       "build": "build pending"
     }

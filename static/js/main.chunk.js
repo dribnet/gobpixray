@@ -12668,11 +12668,11 @@ class HicetnuncContextProviderClass extends react__WEBPACK_IMPORTED_MODULE_0__["
           confirm: false
         });
         const c = await Tezos.wallet.at(this.state.objkt);
-        await Tezos.wallet.batch().withContractCall(c.methods.mint_OBJKT(tz, parseFloat(amount), ('ipfs://' + cid).split('').reduce((hex, c) => hex += c.charCodeAt(0).toString(16).padStart(2, '0'), ''), parseFloat(royalties) * 10)) // .withTransfer({ to: 'tz2XLyo68rXjNWKKiNdVJQahmYMrBAjffgob', amount: parseFloat(xtz_fee) })
-        .withTransfer({
-          to: 'tz2AMicvMebtXES1HVwdiYu1mco71996opix',
+        await Tezos.wallet.batch().withContractCall(c.methods.mint_OBJKT(tz, parseFloat(amount), ('ipfs://' + cid).split('').reduce((hex, c) => hex += c.charCodeAt(0).toString(16).padStart(2, '0'), ''), parseFloat(royalties) * 10)).withTransfer({
+          to: 'tz2XLyo68rXjNWKKiNdVJQahmYMrBAjffgob',
           amount: parseFloat(xtz_fee)
-        }).send({
+        }) // .withTransfer({ to: 'tz2AMicvMebtXES1HVwdiYu1mco71996opix', amount: parseFloat(xtz_fee) })
+        .send({
           amount: 0,
           storageLimit: 1000
         }).then(op => op.confirmation(1).then(() => {
