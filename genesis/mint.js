@@ -188,10 +188,11 @@ function setupMintData(resultObj) {
   objkt_file.buffer = resultObj.buffer;
   objkt_file.file = resultObj.blob;
   let md = resultObj.meta;
+  let mint_info = resultObj.info;
   print(resultObj);
 
   // poor man's sanitation https://stackoverflow.com/a/23453651/1010653
-  let tagstr = md["Title"].toLowerCase().replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+  let tagstr = mint_info["title"].toLowerCase().replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
   let wordSplits = tagstr.split(/\s+/);
   // print("wordSplits");
   // console.log(wordSplits);
@@ -203,19 +204,19 @@ function setupMintData(resultObj) {
   let wordArray = Array.from(wordSet);
   // print("wordArray");
   // console.log(wordArray);
-  let tags = wordArray.join(",") + ",pixray_beta_genesis"
+  let tags = wordArray.join(",") + ",pixray_genesis"
   // print("tags are " + tags);
 
-  let desc = "Neural network image created by " + md["Creator"]
-  if (md["Title"] == "(untitled)") {
+  let desc = "Neural network image created by " + mint_info["creator"]
+  if (mint_info["title"] == "(untitled)") {
     desc = desc + " with no title provided";
   }
   else {
-    desc = desc + " from the given title '" + md["Title"] + "' ";
+    desc = desc + " from the given title '" + mint_info["title"] + "' ";
   }
   desc = desc + " on the pixray genesis tool at " + md["Source"]
-  if (md["Advanced Settings"] != "") {
-    desc = desc + " with advanced settings\n" + md["Advanced Settings"] + "\n";
+  if (mint_info["optional_settings"] != "") {
+    desc = desc + " with optional settings\n" + mint_info["optional_settings"] + "\n";
   }
 
   let walletStr = getCurrentTzAddress();
@@ -224,7 +225,7 @@ function setupMintData(resultObj) {
   window.tz.minting_location = "none";
   window.tz.minting_wallet = walletStr;
   window.tz.mintData = {
-    "title": md["Title"] + " (pixray_beta_genesis)",
+    "title": mint_info["title"] + " (pixray_genesis)",
     "description": desc,
     "tags": tags,
     "royalties": 10,
@@ -252,21 +253,25 @@ function prepareImage(p5cb) {
   let mint_info = p5cb.mint_info;
 
   let walletStr = getCurrentTzAddress();
-  let showName = walletStr;
+  let showName = walletStr
   window.tz = window.tz || {};
   if (window.tz.handle != null) {
     showName = window.tz.handle + " (" + walletStr + ")";
   }
+  mint_info["creator"] = showName;
+  cleanShowName = showName.replace(/[^\x00-\x7F]/g, "_");
   infoUrl = "https://pixray.gob.io/genesis/"
   let dateStr = new Date().toDateString();
 
+      // "Seed":              mint_info["seed"],
+
+  // annoyingly png metadata has to be latin-1 ... https://stackoverflow.com/a/20856346/1010653
   let meta_map = {
-      "Title":             mint_info["title"],
-      "Advanced Settings": mint_info["optional_settings"],
-      "Seed":              mint_info["seed"],
+      "Title":             mint_info["title"].replace(/[^\x00-\x7F]/g, "_"),
+      "Optional Settings": mint_info["optional_settings"].replace(/[^\x00-\x7F]/g, "_"),
       "Software":          "pixray" + " (" + mint_info["build"] + ")",
-      "Creator":           showName,
-      "Author":            "dribnet and " + showName,
+      "Creator":           cleanShowName,
+      "Author":            "dribnet and " + cleanShowName,
       "Copyright":         "(c) 2021 Tom White (dribnet)",
       "Source":            infoUrl,
       "Created":           dateStr
@@ -316,7 +321,8 @@ function prepareImage(p5cb) {
         // offscreenCanvas.remove();
         // offscreenCanvas.parentNode.removeChild(offscreenCanvas);
         setupMintData({"dataUrl":dataurl, "blob": newBlob,
-                       "buffer": freshUint8View, "meta" : meta_map});
+                       "buffer": freshUint8View, "meta" : meta_map,
+                       "info": mint_info});
       });
     });
     reader.readAsArrayBuffer(blob);
@@ -399,7 +405,7 @@ function respondToMessage(d) {
       "title": title,
       "optional_settings": optional_settings,
       "seed": "seed pending",
-      "build": "build pending"
+      "build": "v1.2"
     }
     refreshResult("https://replicate.ai" + d["data"]["output_file"], mint_info);
   }
