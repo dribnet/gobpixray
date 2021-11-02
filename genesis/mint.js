@@ -213,10 +213,9 @@ function setupMintData(resultObj) {
   else {
     desc = desc + " from the given title '" + md["Title"] + "' ";
   }
-  desc = desc + " on the pixray genesis tool at " + md["Source"] + 
-      " with a style of " + md["Drawing Style"];
+  desc = desc + " on the pixray genesis tool at " + md["Source"]
   if (md["Advanced Settings"] != "") {
-    desc = desc + " and advanced settings\n{ " + md["Advanced Settings"] + "\n }";
+    desc = desc + " and advanced settings\n" + md["Advanced Settings"] + "\n";
   }
 
   let walletStr = getCurrentTzAddress();
@@ -262,8 +261,7 @@ function prepareImage(p5cb) {
 
   let meta_map = {
       "Title":             mint_info["title"],
-      "Advanced Settings": mint_info["advanced_settings"],
-      "Drawing Style":     mint_info["drawing_style"],
+      "Advanced Settings": mint_info["optional_settings"],
       "Seed":              mint_info["seed"],
       "Software":          "pixray" + " (" + mint_info["build"] + ")",
       "Creator":           showName,
@@ -389,9 +387,9 @@ function respondToMessage(d) {
     if (d["data"]["inputs"].hasOwnProperty('title')) {
       title = d["data"]["inputs"]["title"].trim();
     }
-    let advanced_settings = "";
-    if (d["data"]["inputs"].hasOwnProperty('advanced_settings')) {
-      advanced_settings = d["data"]["inputs"]["advanced_settings"].trim();
+    let optional_settings = "";
+    if (d["data"]["inputs"].hasOwnProperty('optional_settings')) {
+      optional_settings = d["data"]["inputs"]["optional_settings"].trim();
     }
     if (title == "") {
       title = "(untitled)";
@@ -399,7 +397,7 @@ function respondToMessage(d) {
     let drawing_style = d["data"]["inputs"]["drawing_style"].trim();
     let mint_info = {
       "title": title,
-      "advanced_settings": advanced_settings,
+      "optional_settings": optional_settings,
       "drawing_style": drawing_style,
       "seed": "seed pending",
       "build": "build pending"
