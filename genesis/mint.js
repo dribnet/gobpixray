@@ -215,7 +215,7 @@ function setupMintData(resultObj) {
   }
   desc = desc + " on the pixray genesis tool at " + md["Source"]
   if (md["Advanced Settings"] != "") {
-    desc = desc + " and advanced settings\n" + md["Advanced Settings"] + "\n";
+    desc = desc + " with advanced settings\n" + md["Advanced Settings"] + "\n";
   }
 
   let walletStr = getCurrentTzAddress();
@@ -229,8 +229,9 @@ function setupMintData(resultObj) {
     "tags": tags,
     "royalties": 10,
     "file": objkt_file,
-    "mint_fee": 0.01
-  }  
+    "mint_fee": 1.0
+  }
+  window.tz.mintPrice = 1.0;
 
   result_is_ready = true;
   updateMintButton();
@@ -394,11 +395,9 @@ function respondToMessage(d) {
     if (title == "") {
       title = "(untitled)";
     }
-    let drawing_style = d["data"]["inputs"]["drawing_style"].trim();
     let mint_info = {
       "title": title,
       "optional_settings": optional_settings,
-      "drawing_style": drawing_style,
       "seed": "seed pending",
       "build": "build pending"
     }
