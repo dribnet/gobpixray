@@ -103,6 +103,32 @@
             text-align: center;
         }
 
+/** https://stackoverflow.com/a/17508836/1010653
+ * Emulating <blink> using WebKit CSS3 animation        
+ *   This code is part of John Smith's blog
+ *
+ * Copyright 2010 by John Smith, All Rights Reserved
+ *
+ * @link   http://www.john-smith.me/emulating--lt-blink-gt--using-webkit-css3-animation
+ * @date   18th October 2010 at 11:01 p.m.
+ * @author John Smith
+ */
+@-webkit-keyframes blinker { from {opacity:1.0;} to {opacity:0.0;} }
+        @keyframes blinker { from {opacity:1.0;} to {opacity:0.0;} }
+
+.blink {
+   text-decoration:blink;
+
+  -webkit-animation-name:blinker;
+          animation-name:blinker;  
+  -webkit-animation-iteration-count:infinite;  
+          animation-iteration-count:infinite;  
+  -webkit-animation-timing-function:cubic-bezier(1.0,0,0,1.0);
+          animation-timing-function:cubic-bezier(1.0,0,0,1.0);
+  -webkit-animation-duration:4s; 
+          animation-duration:4s; 
+}
+
     </style>
 
 </head>
@@ -110,6 +136,7 @@
 
     <div class="outer">
         <h4>pixray genesis minting</h4>
+        <h4 class="blink">whoops: is minting down - working on fix 🙃<blink></h4>
 
         <div class="inner">
             <div id="root" style="display: none;">
