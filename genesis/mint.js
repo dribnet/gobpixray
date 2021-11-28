@@ -374,6 +374,7 @@ function refreshResult(new_image, mint_info=null) {
   else {
     // target["src"] = new_image;
     // beginFetchImage(standby_image); // <- use this when CORS debugging
+    print("THIS IS THE FILE: " + new_image)
     beginFetchImage(new_image, mint_info);
   }
   // console.log("UPDATED TO " + new_image);
