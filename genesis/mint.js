@@ -230,9 +230,9 @@ function setupMintData(resultObj) {
     "tags": tags,
     "royalties": 10,
     "file": objkt_file,
-    "mint_fee": 1.0
+    "mint_fee": 2.0
   }
-  window.tz.mintPrice = 1.0;
+  window.tz.mintPrice = 2.0;
 
   result_is_ready = true;
   updateMintButton();
@@ -407,14 +407,14 @@ function respondToMessage(d) {
       "seed": "seed pending",
       "build": "v1.2"
     }
-    refreshResult("https://replicate.ai" + d["data"]["output_file"], mint_info);
+    refreshResult("https://replicate.com" + d["data"]["output_file"], mint_info);
   }
   else if (result_is_ready) {
     refreshResult(null);
   }
 }
 
-// listen for messages coming from replicate.ai embed
+// listen for messages coming from replicate.com embed
 window.addEventListener("message", (event) => {
   respondToMessage(event.data);
 })
