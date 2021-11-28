@@ -218,6 +218,7 @@ function setupMintData(resultObj) {
   if (mint_info["optional_settings"] != "") {
     desc = desc + " with optional settings\n" + mint_info["optional_settings"] + "\n";
   }
+  desc = desc + " (pixray v1.4b1)"
 
   let walletStr = getCurrentTzAddress();
 
