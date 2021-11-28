@@ -406,7 +406,7 @@ function respondToMessage(d) {
       "title": title,
       "optional_settings": optional_settings,
       "seed": "seed pending",
-      "build": "v1.2"
+      "build": "v1.4b1"
     }
     refreshResult("https://replicate.com" + d["data"]["output_file"], mint_info);
   }
