@@ -1,0 +1,15 @@
+<p>This is the data passed to this page:</p>
+
+<pre><code>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+let pred = urlParams.get('prediction')
+document.write(pred)
+if (pred.hasOwnProperty('status') && pred["status"] == "success") {
+  let url = "https://replicate.com" + pred["output_file"];
+  document.body.style.backgroundImage = "url('" + url + "')";
+}
+</script>
+</code></pre>
+<br>
+<p>View source to see what's going on here!</p>
