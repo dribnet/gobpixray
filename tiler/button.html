@@ -3,10 +3,13 @@
 <pre><code>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-let pred = urlParams.get('prediction')
-document.write(pred)
+let pred_str = urlParams.get('prediction');
+document.write(pred_str);
+const pred = JSON.parse(pred_str);
 if (pred.hasOwnProperty('status') && pred["status"] == "success") {
-  let url = "https://replicate.com" + pred["output_file"];
+  // let url = "https://replicate.com" + pred["output_file"];
+  let url = pred["output_file"];
+  console.log("Here comes " + url);
   document.body.style.backgroundImage = "url('" + url + "')";
 }
 </script>
